@@ -1,0 +1,10 @@
+*.dll
+*.exe
+*.json
+*.pdb
+WeatherMonitoringAndReportingSystem.csproj
+config.json
+config.txt
+/obj/*
+/bin/
+/debug/
