@@ -8,9 +8,9 @@ using Newtonsoft.Json;
 
 namespace WeatherMonitoringAndReportingSystem.Models
 {
-    internal class JsonFormatHandler
+    internal class JsonFormatHandler:IHandler
     {
-        public WeatherData ParseJson(string jsonData)
+        public WeatherData Parse(string jsonData)
         {
             try
             {
