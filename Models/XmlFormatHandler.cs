@@ -8,9 +8,9 @@ using System.Xml.Linq;
 
 namespace WeatherMonitoringAndReportingSystem.Models
 {
-    internal class XmlFormatHandler
+    internal class XmlFormatHandler:IHandler
     {
-            public WeatherData ParseXml(string xmlData)
+            public WeatherData Parse(string xmlData)
             {
                 try
                 {
