@@ -42,41 +42,43 @@ namespace WeatherMonitoringAndReportingSystem
             BotConfigurations configurations = ConfigurationsReader.ReadFromJsonFile();
             if (configurations != null)
             {
-                RainBot rainBot = new RainBot(configurations.RainBotConfiguration.humidityThreshold,configurations.RainBotConfiguration.message);
-                SnowBot snowBot = new SnowBot(configurations.SnowBotConfiguration.temperatureThreshold, configurations.SnowBotConfiguration.message);
-                SunBot sunBot = new SunBot(configurations.SunBotConfiguration.temperatureThreshold, configurations.SunBotConfiguration.message);
-                Console.Write("plz enter data in xml format or json format: ");
-                string data = Console.ReadLine();
-                //<WeatherData><Location>City Name</Location><Temperature>32</Temperature><Humidity>40</Humidity></WeatherData>
-                //{"Location": "City Name", "Temperature": 32, "Humidity": 40}
-                string type;
-                if (IsJson(data))
+                while (true)
                 {
-                    Console.WriteLine("The data is in JSON format.");
-                    type = "json";
-                }
-                else if (IsXml(data))
-                {
-                    Console.WriteLine("The data is in XML format.");
-                    type = "Xml";
+                    Subject subject = new Subject();
+                    new RainBot(subject,configurations.RainBotConfiguration.humidityThreshold,configurations.RainBotConfiguration.message);
+                    new SnowBot(subject,configurations.SnowBotConfiguration.temperatureThreshold,configurations.SnowBotConfiguration.message);
+                    new SunBot(subject,configurations.SunBotConfiguration.temperatureThreshold,configurations.SunBotConfiguration.message);
+                    Console.Write("plz enter data in xml format or json format: ");
+                    string data = Console.ReadLine();
+                    //<WeatherData><Location>City Name</Location><Temperature>32</Temperature><Humidity>40</Humidity></WeatherData>
+                    //{"Location": "City Name", "Temperature": 32, "Humidity": 40}
+                    string type;
+                    if (IsJson(data))
+                    {
+                        Console.WriteLine("The data is in JSON format.");
+                        type = "json";
+                    }
+                    else if (IsXml(data))
+                    {
+                        Console.WriteLine("The data is in XML format.");
+                        type = "Xml";
 
-                }
-                else
-                {
-                    Console.WriteLine("The data is in Unkown format.");
-                    type = "Unkown";
-                }
-                if (formatFactory.getFormateType(type) == null)
-                {
-                    Console.WriteLine("invalid format");
-                }
-                else
-                {
-                    Handler = formatFactory.getFormateType(type);
-                    WeatherData weatherData = Handler.Parse(data);
-                    rainBot.Activate(weatherData.Humidity);
-                    snowBot.Activate(weatherData.Temperature);
-                    sunBot.Activate(weatherData.Temperature);
+                    }
+                    else
+                    {
+                        Console.WriteLine("The data is in Unkown format.");
+                        type = "Unkown";
+                    }
+                    if (formatFactory.getFormateType(type) == null)
+                    {
+                        Console.WriteLine("invalid format");
+                    }
+                    else
+                    {
+                        Handler = formatFactory.getFormateType(type);
+                        WeatherData weatherData = Handler.Parse(data);
+                        subject.NotifyAll(weatherData.Temperature, weatherData.Humidity);
+                    }
                 }
             }
         }

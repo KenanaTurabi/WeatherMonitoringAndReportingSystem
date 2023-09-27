@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace WeatherMonitoringAndReportingSystem.Bots
 {
-    internal class SnowBot
+    internal class SnowBot:Bot
     {
         public int TemperatureThreshold { get; set; }
         public string Message { get; set; }
 
-        public SnowBot(int temperatureThreshold, string message)
+        public SnowBot(Subject subject,int temperatureThreshold, string message)
         {
+            this.subject = subject;
             TemperatureThreshold = temperatureThreshold;
             Message = message;
+            this.subject.Attach(this);
         }
-        public void Activate(int Temperature)
+        public override void Activate(int Temperature)
         {
             if (Temperature < TemperatureThreshold)
             {

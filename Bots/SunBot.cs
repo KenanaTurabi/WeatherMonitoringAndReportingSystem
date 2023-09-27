@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace WeatherMonitoringAndReportingSystem.Bots
 {
-    internal class SunBot
+    internal class SunBot : Bot
     {
         public int TempertaureThreshold { get; set; }
         public string Message { get; set; }
 
-        public SunBot(int tempertaureThreshold, string message)
+        public SunBot(Subject subject,int tempertaureThreshold, string message)
         {
+            this.subject = subject;
             TempertaureThreshold = tempertaureThreshold;
             Message = message;
+            this.subject.Attach(this);
         }
-        public void Activate(int Temperature)
+        public override void Activate(int Temperature)
         {
             if (Temperature > TempertaureThreshold)
             {
